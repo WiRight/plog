@@ -3,38 +3,29 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <GLFW/glfw3.h>
+#include <fcntl.h>
 
 sem_t semaphore;
 
 void* threadFunc(void* data) {
-  // FILE* file = fopen("log.d", "a+");
-  // fclose(file);
-  printf("%s\n", "threadFunc end");
-  // while (1) {
-    // sem_wait(&semaphore);
+  while (1) {
+    sem_wait(&semaphore);
+    FILE* file = fopen("log.d", "a+");
     int value;
     sem_getvalue(&semaphore, &value);
-    printf("%s %d\n", "Data", value);
-    // sem_post(&semaphore);
-  // }
+    fprintf(file, "%s [%d]\n", "some message", value);
+    fclose(file);
+    sem_destroy(&semaphore);
+  }
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-  if (key == 257) {
-    sem_destroy(&semaphore);
-    int value;
-    sem_getvalue(&semaphore, &value);
-    printf("%s %d\n", "key_callback Enter Data", value);
-    return;
-  }
   if (action == GLFW_PRESS) {
+    if (key == 257) {
+      sem_post(&semaphore);
+      return;
+    }
     printf("Key %d;\n", key);
-    sem_wait(&semaphore);
-    int value;
-    sem_getvalue(&semaphore, &value);
-    printf("%s %d\n", "key_callback Data", value);
-    sem_post(&semaphore);
-    // sem_post(&semaphore);
   }
 }
 
@@ -56,7 +47,7 @@ int main() {
   glfwSetKeyCallback(window, key_callback);
 
   pthread_t thread;
-  sem_init(&semaphore, 0, 2);
+  sem_init(&semaphore, 0, 0);
   pthread_create(&thread, NULL, threadFunc, NULL);
 
   /* Loop until the user closes the window */

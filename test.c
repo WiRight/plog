@@ -13,23 +13,29 @@ void* threadFunc(void* value) {
         printf("%s %d\n", "threadFunc", val);
         // sem_destroy(&semaphore);
         // sem_post(&semaphore);
+        // printf("\n%s\n\n", "end");
     }
     printf("end threadFunc\n");
 }
 
 int main() {
     pthread_t thread;
-    sem_init(&semaphore, 0, 1);
     pthread_create(&thread, NULL, threadFunc, NULL);
 
+    // semaphore.__align = 2;
+    sem_init(&semaphore, 0, 10);
     sem_post(&semaphore);
     printf("sem_post #1\n");
     getchar();
 
+    // semaphore.__align = 5;
+    sem_destroy(&semaphore);
+    sem_init(&semaphore, 0, 5);
     sem_post(&semaphore);
     printf("sem_post #2\n");
     getchar();
 
+    // semaphore.__align = 10;
     sem_post(&semaphore);
     printf("sem_post #3\n");
     getchar();
