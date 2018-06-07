@@ -12,6 +12,7 @@
 
 // ------------------------------------------------------
 
+#define TIME_L 80
 #define PLOG_ASSERT "assert"
 #define PLOG_INFO "info"
 #define PLOG_WARNING "warning"
@@ -33,39 +34,45 @@
 
 /**
  * Семафор для работы с потоком
+ * @since 1.0
  */
 static sem_t semaphore;
 
 /**
  * Структура данных сообщения
+ * @since 1.0
  */
 typedef struct PLogMsg {
-    char *logType;
-    char *fileName;
-    char *functionName;
-    char *message;
+    char* logType;
+    char* fileName;
+    char* functionName;
+    char* message;
     int line;
 } PLogMsg;
 
 /**
  * Переменная для работы с сообщением лога
+ * @since 1.0
  */
 static PLogMsg pLogMsg;
 
 /**
  * Переменная для работы с потоком
+ * @since 1.0
  */
 static pthread_t logThread;
 
 /**
  * Переменная для обозначения корректного выхода потока
+ * @since 1.0
  */
 static unsigned short int pExit;
 
 /**
  * Форматирование времени
+ * @since 1.0
  */
-char *ptimeFormat;
+char* ptimeFormat;
 
 /**
  * Форматирование лога
@@ -79,25 +86,44 @@ char *ptimeFormat;
  * 5 - Линия, где был вызван лог
  * 6 - Сообщение пользователя
  * ------------------------------
+ * @since 1.0
  */
-char *plogFormat;
+char* plogFormat;
 
 // ------------------------------------------------------
 
 /**
  * Инициализация модуля логирования
+ * @since 1.0
  */
 void plogInit();
 
 /**
  * Функция, которая будет в фоне работать с логами
  * @param params Некоторые параметры для функции потока
- * @return
+ * @since 1.0
  */
-static void *threadFunc(void *);
+static void* threadFunc(void *);
+
+/**
+ * Фукнция для записи данных в файл
+ * На данные момент запись производится только в файл log.d
+ * TODO: стоит добавить кастомизацию, куда писать логи
+ * TODO: стоит писать каждый день в новый файл (для уникальности)
+ * @since 1.0
+ */
+static inline void writeFile(char *);
+
+/**
+ * Получение текущего времени в формате [ptimeFormat]
+ * @return Формированное время
+ * @since 1.0
+ */
+static inline char* getFormatTime();
 
 /**
  * Закрытие работы с модулем логирования
+ * @since 1.0
  */
 void plogDestroy();
 
@@ -109,6 +135,7 @@ void plogDestroy();
  * @param functionName Имя функции
  * @param line Лииния, где вызвался лог
  * @param message Сообщение пользователя
+ * @since 1.0
  */
 void plogLog(char *, char *, const char *, int, char *);
 
