@@ -55,6 +55,7 @@ dkms.conf
 .vscode/
 .DS_Store/
 
+log.d
 main
 test
 
