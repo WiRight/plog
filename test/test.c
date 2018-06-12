@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <mcheck.h>
+// #include <mcheck.h>
 
 #include "lib/plog.h"
 
 int main() {
-  mtrace();
+  // mtrace();
   // Инициализация потока
   plogInit();
 
@@ -18,6 +18,6 @@ int main() {
 
   // Освобождение ресурсов
   plogDestroy();
-  muntrace();
+  // muntrace();
   return 0;
 }
